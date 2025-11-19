@@ -1,0 +1,2 @@
+Piramide	5	10
+Fim
