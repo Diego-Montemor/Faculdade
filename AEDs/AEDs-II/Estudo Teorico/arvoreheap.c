@@ -24,9 +24,18 @@ void inserirMIN(int heap[], int valor, int *tamanho){
 }
 void removeMIN(int heap[], int *tamanho){
     troca(&heap[0],&heap[*tamanho -1]);
-    
-    //Fazer as funções de remoção
-    
+    heap[*tamanho -1] = __INT_MAX__;
+    int i = 0;
+    while (i < *tamanho -2){
+        int filhoDir = heap[(2*i)+2];
+        int filhoEsq = heap[(2*i)+1];
+        int j = i;
+        i = filhoDir < filhoEsq ? (2*i)+2 : (2*i)+1;
+        if(i < *tamanho -2){
+            troca(&heap[i],&heap[j]);
+        }
+    }
+
     (*tamanho)--;
 }
 
@@ -43,11 +52,18 @@ void inserirMAX(int heap[], int valor, int *tamanho){
 
 void removeMAX(int heap[], int *tamanho){
     troca(&heap[0],&heap[*tamanho -1]);
-    int i = *tamanho - 2;
-    while(heap[(i-1)/2] < heap[i]){
-        troca(&heap[(i-1)/2],&heap[i]);
-        i = (i-1)/2;
+    heap[*tamanho -1] = -1;
+    int i = 0;
+    while (i < *tamanho -2){
+        int filhoDir = heap[(2*i)+2];
+        int filhoEsq = heap[(2*i)+1];
+        int j = i;
+        i = filhoDir > filhoEsq ? (2*i)+2 : (2*i)+1;
+        if(i < *tamanho -2){//evita trocar com lixo de momoria
+            troca(&heap[i],&heap[j]);
+        }
     }
+
     (*tamanho)--;
 }
 
@@ -74,14 +90,17 @@ int main(){
     }
 
     printf("\n1 remocao: ");
+    removeMIN(arvoreHeapMIN,&tamanhoMIN);
     for(int i = 0; i <= tamanhoMIN-1; i++){
         printf("%d,",arvoreHeapMIN[i]);
     }
     printf("\n2 remocao: ");
+    removeMIN(arvoreHeapMIN,&tamanhoMIN);
     for(int i = 0; i <= tamanhoMIN-1; i++){
         printf("%d,",arvoreHeapMIN[i]);
     }
     printf("\n3 remocao: ");
+    removeMIN(arvoreHeapMIN,&tamanhoMIN);
     for(int i = 0; i <= tamanhoMIN-1; i++){
         printf("%d,",arvoreHeapMIN[i]);
     }
