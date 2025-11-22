@@ -38,7 +38,6 @@ struct no* RemoveRaiz(struct no* raiz){
         q = q->maior;
     }
 
-
     p->menor = q->menor;
     q->menor = raiz->menor;
     q->maior = raiz->maior;
