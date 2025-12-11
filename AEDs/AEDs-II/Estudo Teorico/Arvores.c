@@ -7,10 +7,11 @@ struct no{
 }*p,*tmp, *tmp1;
 
 struct no* BuscaBinaria(struct no* raiz, int valor){
-    if(raiz == NULL || raiz->valor == valor) return raiz;
-    if(raiz->valor >valor){
-        return BuscaBinaria(raiz->menor, valor);
-    }else return BuscaBinaria(raiz->maior, valor);
+    if(raiz == NULL || raiz->valor == valor) return raiz;/*faz a função retornar o valor caso ela tenha sido encontrada ou NULL
+                                                           devido ela não achar o valor após ter decido */
+
+    if(raiz->valor >valor)return BuscaBinaria(raiz->menor, valor);//vai pra esquerda
+    else return BuscaBinaria(raiz->maior, valor);//vai para a direita
 }
 
 struct no* inserir(struct no* raiz, struct no* valor){
@@ -51,7 +52,7 @@ struct no* RemoveNo(struct no* raiz, int valor){
     if(n){
         struct no* pai = buscaPai(raiz, valor);
         if(pai){
-
+            
         }
     }
 
