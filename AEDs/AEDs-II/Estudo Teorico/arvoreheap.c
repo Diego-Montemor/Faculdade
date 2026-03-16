@@ -22,7 +22,8 @@ void inserirMIN(int heap[], int valor, int *tamanho){
     }
     (*tamanho)++;
 }
-void removeMIN(int heap[], int *tamanho){
+int removeMIN(int heap[], int *tamanho){
+    int valor = heap[0];
     troca(&heap[0],&heap[*tamanho -1]);
     heap[*tamanho -1] = __INT_MAX__;
     int i = 0;
@@ -37,7 +38,19 @@ void removeMIN(int heap[], int *tamanho){
     }
 
     (*tamanho)--;
+    return valor;
 }
+
+void heapMIMsort(int heap[], int *tamanho, int MINheap[]){
+    int tam = *tamanho;
+    for(int i = 0; i < tam ;i++){
+        heap[i] = removeMIN(MINheap, tamanho);
+    }
+    for(int i = 0; i <= tam-1; i++){
+        printf("%d,",heap[i]);
+    }
+}
+
 
 // Função de inserir em uma MAX-heap
 void inserirMAX(int heap[], int valor, int *tamanho){
@@ -67,25 +80,12 @@ void removeMAX(int heap[], int *tamanho){
     (*tamanho)--;
 }
 
-
 int main(){
 
     printf("Numeros de entrada: 7,8,22,17,15,12,11,8,115,1 \nMIN-heap: ");
 //  +--[MIN-heap]--+    
     int arvoreHeapMIN[15], tamanhoMIN = 0;
-    // 7,8,22,17,15,12,11,8,115,1      30, 20, 40, 10, 25, 35
-    
-    inserirMIN(arvoreHeapMIN,30,&tamanhoMIN);
-    inserirMIN(arvoreHeapMIN,20,&tamanhoMIN);
-    inserirMIN(arvoreHeapMIN,40,&tamanhoMIN);
-    inserirMIN(arvoreHeapMIN,10,&tamanhoMIN);
-    inserirMIN(arvoreHeapMIN,25,&tamanhoMIN);
-    inserirMIN(arvoreHeapMIN,35,&tamanhoMIN);
-
-    for(int i = 0; i <= tamanhoMIN-1; i++){
-        printf("%d,",arvoreHeapMIN[i]);
-    }
-    /*
+    // 7,8,22,17,15,12,11,8,115,1      30, 20, 40, 10, 25, 35 
     inserirMIN(arvoreHeapMIN,7,&tamanhoMIN);
     inserirMIN(arvoreHeapMIN,8,&tamanhoMIN);
     inserirMIN(arvoreHeapMIN,22,&tamanhoMIN);
@@ -96,23 +96,17 @@ int main(){
     inserirMIN(arvoreHeapMIN,8,&tamanhoMIN);
     inserirMIN(arvoreHeapMIN,115,&tamanhoMIN);
     inserirMIN(arvoreHeapMIN,1,&tamanhoMIN);
-    printf("\n1 remocao: ");
-    removeMIN(arvoreHeapMIN,&tamanhoMIN);
+    printf("\nsem ordenar: ");
     for(int i = 0; i <= tamanhoMIN-1; i++){
         printf("%d,",arvoreHeapMIN[i]);
     }
-    printf("\n2 remocao: ");
-    removeMIN(arvoreHeapMIN,&tamanhoMIN);
+    printf("\nordenado: ");
+    int MINheapOrdenado[tamanhoMIN];
+    heapMIMsort(MINheapOrdenado,&tamanhoMIN,arvoreHeapMIN);
     for(int i = 0; i <= tamanhoMIN-1; i++){
-        printf("%d,",arvoreHeapMIN[i]);
-    }
-    printf("\n3 remocao: ");
-    removeMIN(arvoreHeapMIN,&tamanhoMIN);
-    for(int i = 0; i <= tamanhoMIN-1; i++){
-        printf("%d,",arvoreHeapMIN[i]);
+        printf("%d,",MINheapOrdenado[i]);
     }
     
-    30, 20, 40, 10, 25, 35*/
 
     printf("\nMAX-heap: ");
 
