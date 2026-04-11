@@ -49,5 +49,25 @@ fourPower x = square (square x)
 
 -- Exercicio 6
 
-somaDeRaiz :: Int -> Int
-somaDeRaiz x 
+somaDeRaiz :: Int -> Float
+somaDeRaiz  1 = sqrt 6 
+somaDeRaiz x = sqrt (6 + somaDeRaiz (x - 1))
+
+-- Exercicio 7
+
+arranjo :: Int -> Int -> Int
+arranjo x y = fat x `div` fat (x - y)
+-- OBS: para funcionar x >= y
+
+-- Exercicio 8
+
+mdc :: Int -> Int -> Int
+mdc x y 
+    | (x `mod` y) /= 0 = mdc x (x `mod` y)
+    | otherwise = y
+-- OBS: para funcionar x >= y
+
+-- Exercicio 9
+
+multiploEmIntervalo :: Int -> Int -> Int -> Int
+multiploEmIntervalo x y z = 0
