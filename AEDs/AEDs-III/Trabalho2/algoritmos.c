@@ -11,6 +11,8 @@ Nome: Francisco Toro Tonissi       Matrícula: 2025.1.08.025
 Nome: Pedro Ferrera Prado          Matrícula: 2025.1.08.028
 */
 
+
+//  [Feito pelo Francisco]
 //Ferramentas Auxiliares:
 
 int juizdasLetras(char l1, char l2){
@@ -20,11 +22,11 @@ int juizdasLetras(char l1, char l2){
     }else{
         return -1;
     }
-
-    //Aqui é para quando for colocar a diagonal, é necessario verificar se bate o A com T ou o C com G e se nao bater, decrmenta 1 da pontuacao 
+    /*Aqui é para quando for colocar a diagonal, é necessario verificar se 
+      bate o A com T ou o C com G e se nao bater, decrmenta 1 da pontuacao. */ 
 }
-
-int escolherMaior(int a, int b, int c){ //Essa função serve para comparar os 3 possiveis caminhos que o algoritmo vai fazer 
+//Essa função serve para comparar os 3 possiveis caminhos que o algoritmo vai fazer
+int escolherMaior(int a, int b, int c){ 
     int maior = a;
     if(b > maior){
         maior = b;
@@ -50,12 +52,13 @@ long int programacao_dinamica(char *s1, char *s2) {
     }
 
     matriz[0][0] = 0;
-
+    //O for do i, serve pra prencher a coluna j[0] decrementando sempre -2
     for(int i = 1; i <= tamanho1; i++){
-        matriz[i][0] = matriz[i - 1][0] - 2; //o for do i, serve pra prencher a coluna j[0] decrementando sempre -2
+        matriz[i][0] = matriz[i - 1][0] - 2; 
     }
+    // o for do j, serve pra prencher a linha i[0] decrementando sempre -2
     for(int j = 1; j <= tamanho2; j++){
-        matriz[0][j] = matriz[0][j - 1] - 2; // o for do j, serve pra prencher a linha i[0] decrementando sempre -2
+        matriz[0][j] = matriz[0][j - 1] - 2; 
     }
 
     for(int i = 1; i <= tamanho1; i++){
@@ -81,6 +84,7 @@ long int programacao_dinamica(char *s1, char *s2) {
     //return pontuacao;
 }
 
+// [Feito por mim(Diego)]
 bool compara(char *p1, char *p2){ // compara os dois char para achar um par
     if((*p1 == 'A' && *p2 == 'T') || (*p1 == 'T' && *p2 == 'A') || (*p1 == 'C' && *p2 == 'G') || (*p1 == 'G' && *p2 == 'C')){
         return true;
