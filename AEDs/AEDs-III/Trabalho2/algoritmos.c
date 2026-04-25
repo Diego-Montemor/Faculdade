@@ -3,14 +3,13 @@
 #include <stdio.h>
 #include <string.h>
 
-/* Preencher os campos abaixo
+/*
 Participantes do grupo
-Nome: Diego Vianna Leite Montemor  Matrícula: 2025.1.08.023
-Nome: Pedro Medina Stracieri       Matrícula: 2023.1.08.033
-Nome: Francisco Toro Tonissi       Matrícula: 2025.1.08.025
-Nome: Pedro Ferrera Prado          Matrícula: 2025.1.08.028
+Nome: Diego Vianna Leite Montemor  Matrícula: 2025.1.08.023 -> Fez o algoritimo guloso
+Nome: Pedro Medina Stracieri       Matrícula: 2023.1.08.033 -> Fez os testes
+Nome: Francisco Toro Tonissi       Matrícula: 2025.1.08.025 -> Fez o algoritimo dinamico
+Nome: Pedro Ferrera Prado          Matrícula: 2025.1.08.028 -> Fez o relatorio
 */
-
 
 //  [Feito pelo Francisco]
 //Ferramentas Auxiliares:

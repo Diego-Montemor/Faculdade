@@ -1,3 +1,4 @@
+import GHC.Exts.Heap.Constants (tAG_MASK)
 -- Exercicio 1
 f1 :: Int -> Int
 f1 x 
@@ -30,14 +31,17 @@ multi _ 0 = 0
 multi x y = soma x (multi x (y-1))   
 
 -- Exercicio 4
+tamanhoInt:: Int -> Int -> Int
+tamanhoInt x y
+    | x > y = tamanhoInt x (y*10)
+    | otherwise = y`div`10
+
+inverte:: Int -> Int -> Int -> Int
+inverte _ 0 _ = 0 
+inverte x y z = (x `div` y)*z + inverte (x`mod`y) (y`div`10) z*10
 
 inverteInt :: Int -> Int
-inverteInt x
-    | x > 1000 = (x`div`1000) + inverteInt x
-    | x > 100 = (x`div`100)*10 + inverteInt x
-    | x > 10 = (x`div`10)*100 + inverteInt x
-    | x > 1 =  (x`div`1)*1000 + inverteInt x
-    |otherwise = 0
+inverteInt x = inverte x (tamanhoInt x 1) 1
 
 -- Exercicio 5
 
@@ -70,4 +74,6 @@ mdc x y
 -- Exercicio 9
 
 multiploEmIntervalo :: Int -> Int -> Int -> Int
-multiploEmIntervalo x y z = 0
+multiploEmIntervalo x y z
+    | x <= z = 1 + multiploEmIntervalo x y z
+    |otherwise = 0

@@ -1,4 +1,3 @@
-import Data.Char
 
 type Dia = Int
 type Venda = Int
