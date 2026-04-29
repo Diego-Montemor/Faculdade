@@ -1,4 +1,3 @@
-import GHC.Exts.Heap.Constants (tAG_MASK)
 -- Exercicio 1
 f1 :: Int -> Int
 f1 x 
@@ -75,5 +74,5 @@ mdc x y
 
 multiploEmIntervalo :: Int -> Int -> Int -> Int
 multiploEmIntervalo x y z
-    | x <= z = 1 + multiploEmIntervalo x y z
+    | y <= z = 1 + multiploEmIntervalo x (y+x) z
     |otherwise = 0
