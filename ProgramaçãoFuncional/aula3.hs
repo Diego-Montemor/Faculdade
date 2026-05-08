@@ -48,3 +48,15 @@ ordena [] = []
 ordena (x:y:xs)
     | y > x = y : ordena (x:xs)
     |otherwise = x:ordena (y:xs)
+
+maiorVendaT8b::[(Int, Int)] -> Int    
+maiorVendaT8b [] = 0
+maiorVendaT8b ((a,b):c) = maxi b (maiorVendaT8b c)
+
+maiorVendaT8c::[(Int, Int)] -> Int    
+maiorVendaT8c [] = 0
+maiorVendaT8c (a:c) = maxi (snd a) (maiorVendaT8c c)
+
+maiorVendaT8d::[(Int, Int)] -> Int    
+maiorVendaT8d [] = 0
+maiorVendaT8d c = maxi (snd(head c)) (maiorVendaT8d (tail c))    

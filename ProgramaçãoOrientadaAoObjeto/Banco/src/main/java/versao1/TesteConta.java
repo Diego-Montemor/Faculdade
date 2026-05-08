@@ -1,5 +1,4 @@
-package versao1_5;
-import java.lang.classfile.instruction.SwitchCase;
+package versao1;
 import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
