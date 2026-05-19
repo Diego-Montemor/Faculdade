@@ -1,3 +1,4 @@
+import Data.Char -- começa a usar no exercicio 17
 -- Exercicio 1
 f1 :: Int -> Int
 f1 x 
@@ -76,3 +77,212 @@ multiploEmIntervalo :: Int -> Int -> Int -> Int
 multiploEmIntervalo x y z
     | y <= z = 1 + multiploEmIntervalo x (y+x) z
     |otherwise = 0
+
+-- Exercicio 10
+
+lastDigit:: Int -> Int
+lastDigit x = x `mod` 10
+
+-- Exercicio 11
+
+anyDigit:: Int -> Int -> Int
+anyDigit x y 
+    | 10^x > y = -1
+    |otherwise = lastDigit (inverteInt y `div` 10^x)
+
+-- Exercicio 12
+
+-- (a) não compara se m é diferente de p
+
+-- (b)
+allDiferents:: Int -> Int -> Int -> Bool
+allDiferents a b c = a/=b && a/=c && b/=c
+
+-- Exercicio 13
+howManyEqual:: Int -> Int -> Int -> Int 
+howManyEqual x y z 
+    | allDiferents x y z = 0
+    | (x == y) && (y == z) = 3
+    |otherwise = 2
+
+-- Exercicio 14
+
+vendas:: Int -> Int
+vendas 1 = 10
+vendas 2 = 0
+vendas 3 = 30
+vendas 4 = 0
+vendas 5 = 50
+vendas 6 = 0
+vendas 7 = 70
+vendas _ = 0
+
+-- (a)
+howManyLess:: Int -> Int -> Int -> Int
+howManyLess x a b
+    | a <= b && vendas a < x = 1+ howManyLess (a+1) b x 
+    | a <= b = howManyLess (a+1) b x 
+    |otherwise = 0
+
+-- (b)
+noZeroInPeriod:: Int -> Bool
+noZeroInPeriod 0 = True
+noZeroInPeriod x = (vendas x > 0) && noZeroInPeriod (x-1)
+
+-- (c)
+period::Int -> [Int]
+period 0  = []
+period x 
+    | vendas x == 0 = period (x-1) ++ [x]
+    |otherwise = period (x-1)
+
+zeroInPeriod:: [Int]
+zeroInPeriod = period 7 
+
+-- (d)
+periodL:: Int -> Int -> [Int]
+periodL _ 0 = []
+periodL x y 
+    | vendas y < x = periodL x (y-1) ++ [y]
+    |otherwise = periodL x (y-1) 
+
+periodLess:: Int -> [Int]
+periodLess x = periodL x 7
+
+-- Exercicio 15 
+
+fib:: Int -> Int
+fib 0 = 0
+fib 1 = 1
+fib x = fib (x-2) + fib (x-1) 
+
+percorreFib:: Int -> Int -> Int
+percorreFib x y 
+    | x > fib y = percorreFib x (y+1)
+    | x == fib y = y
+    |otherwise = -1
+
+antFib:: Int -> Int
+antFib x = percorreFib x 2
+
+-- Exercicio 16
+
+funny:: Int -> Int -> Int -> Bool
+funny x y z = x > z && x < y 
+
+-- Exercicio 17
+
+myToUpper:: Char -> Char
+myToUpper x 
+    | 'A' <= x && x <= 'Z' = x 
+    | 'a' <= x && x <= 'z' = chr (ord (x) - 32)
+
+-- Exercicio 18
+
+charToNumber:: Char -> Int
+charToNumber x = ord (x) - 48
+
+-- Exercicio 19 
+
+duplicate:: String -> Int -> String
+duplicate _ 0 = "."
+duplicate x y = x ++ duplicate x (y-1)
+
+-- Exercicio 20
+
+tam:: [a] -> Int
+tam [] = 0
+tam (x:xs) = 1 + tam xs
+
+pushRight:: String -> Int -> String
+pushRight x y 
+    | tam x < y = '>':pushRight x (y-1)
+    | otherwise = x
+
+-- Exercicio 21
+
+(&-):: Int -> Int -> Int
+x &- y = x - 2*y
+--para 10 &- 3 &- 2
+-- infixl 6 &- = 0  maior precedencia a equerda
+-- infixr 6 &- = 12 maior precedencia a direita
+-- infix  6 &- = 0  maior precedencia padrão (esquerda)
+
+--para 10 &- 3 * 2
+-- infix 6 &- = -2 a operação * tem maior precedencia
+-- infix 8 &- = 8 a operação &- tem maior precedencia
+
+-- Exercicio 22
+
+inverteLista:: [a] -> [a]
+inverteLista [] = []
+inverteLista (x:xs) = inverteLista xs ++ [x]
+
+-- Exercicio 23
+
+separaImparPar:: [Int] -> ([Int],[Int])
+separaImparPar [] = ([],[])
+separaImparPar (x:xs)
+    | x `mod` 2 == 0 = (fst(separaImparPar xs), x:snd(separaImparPar xs))
+    | x `mod` 2 == 1 = (x:fst(separaImparPar xs), snd(separaImparPar xs))
+
+-- Exercicio 24    
+
+converte:: [Int] -> String
+converte [] = ""
+converte (x:xs) = chr(x + 64):converte xs
+
+-- Exercicio 25
+{-
+a) ['a'..'g'] = ['a','b','c','d','e','f','g']
+b) [0.1..0.9] = [0.1,1.1]
+c) [0.1,0.3..0.9] = [0.1,0.3,0.5,0.7,0.8999]
+d) [0.4,0.2..0.8] = []
+e) [1,4..15] = [1,4,7,10,13]    
+-}
+-- Exercicio 26
+
+contaChar:: [Char] -> Char -> Int
+contaChar [] _ = 0
+contaChar (x:xs) y 
+    | x == y = contaChar xs y + 1
+    | otherwise = contaChar xs y
+
+-- Exercicio 27
+estaPresente:: Int ->[Int] -> Bool
+estaPresente _ [] = False
+estaPresente y (x:xs) = x == y || estaPresente y xs
+
+purifica:: [Int] -> [Int]
+purifica [] = []
+purifica (x:xs)
+    | estaPresente x xs = purifica xs
+    | otherwise = x:purifica xs
+
+-- Exercicio 28
+addNaLista:: a -> Int -> [a]
+addNaLista _ 0  = []
+addNaLista x y = x: addNaLista x (y-1)
+
+proliferaInt:: [Int] -> [Int]
+proliferaInt [] = []
+proliferaInt (x:xs) = addNaLista x x ++ proliferaInt xs
+
+-- Exercicio 29
+
+proliferaChar:: [Char] -> [Char]
+proliferaChar [] = []
+proliferaChar (x:xs)
+    | 'A' <= x && x <= 'Z' = addNaLista x (ord x - 64) ++ proliferaChar xs 
+    | 'a' <= x && x <= 'z' = addNaLista x (ord x - 96) ++ proliferaChar xs
+
+-- Exercicio 30
+
+myToLower:: Char -> Char
+myToLower x 
+    | 'A' <= x && x <= 'Z' = chr (ord (x) + 32) 
+    | 'a' <= x && x <= 'z' = x
+
+converteChar:: Char -> (Char,Char,Int)
+converteChar x = (myToLower x, myToUpper x, ord x)
+-- myToUpper veio do Exercicio 17
