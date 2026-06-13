@@ -286,3 +286,75 @@ myToLower x
 converteChar:: Char -> (Char,Char,Int)
 converteChar x = (myToLower x, myToUpper x, ord x)
 -- myToUpper veio do Exercicio 17
+
+-- Exercicio 31
+rg :: Int -> (String, Int, Char)
+rg n 
+    | n == 1 = ("Diego Montemor", 20, 'm')
+    | n == 2 = ("Mariana Montemor", 17, 'f')
+    | n == 3 = ("Carlos Silva", 25, 'm')
+    | n == 4 = ("Ana Souza", 30, 'f')
+    | n == 5 = ("Lucas Oliveira", 22, 'm')
+    | n == 6 = ("Beatriz Costa", 28, 'f')
+    | n == 7 = ("João Pedro Santos", 35, 'm')
+    | n == 8 = ("Gabriela Lima", 24, 'f')
+    | n == 9 = ("Rafael Rodrigues", 40, 'm')
+    | n == 10 = ("Fernanda Alves", 27, 'f')
+    | n == 11 = ("Marcos Ferreira", 31, 'm')
+    | n == 12 = ("Camila Pereira", 29, 'f')
+    | n == 13 = ("Thiago Gomes", 26, 'm')
+    | n == 14 = ("Leticia Ribeiro", 21, 'f')
+    | n == 15 = ("Bruno Martins", 33, 'm')
+    | n == 16 = ("Amanda Carvalho", 23, 'f')
+    | n == 17 = ("Rodrigo Mendes", 38, 'm')
+    | n == 18 = ("Larissa Rocha", 19, 'f')
+    | n == 19 = ("Marcelo Dias", 45, 'm')
+    | n == 20 = ("Natalia Barbosa", 32, 'f')
+    | otherwise = ("Ninguem com esse registro!", 9999, 'x')
+
+myFst:: (a,b,c) -> a
+myFst (x,_,_) = x 
+
+mySnd:: (a,b,c) -> b
+mySnd (_,x,_) = x
+
+myTrd:: (a,b,c) -> c 
+myTrd (_,_,x) = x    
+
+--(a)
+
+buscaIdade:: Int -> Int -> Int -> (String,Int,Char)
+buscaIdade x y z
+    | mySnd (rg x) < mySnd (rg y) = buscaIdade x (y+1) z
+    | y > z = rg x
+    | otherwise = buscaIdade y (y+1) z
+
+nomeMenorIdade:: Int -> String
+nomeMenorIdade x = myFst (buscaIdade 1 1 x)
+
+--(b)
+calculaMedia:: Int -> Int -> Int -> Int 
+calculaMedia x y z 
+    | y <= z = x + mySnd(rg y)
+    | otherwise = x `div` y 
+
+mediaIdade:: Int -> Int 
+mediaIdade x = calculaMedia 0 1 x
+
+-- Exercicio 32
+
+ordenaTupla:: (Int,Int,Int,Int) -> (Int,Int,Int,Int)
+ordenaTupla (a,b,c,d)
+    | a > b = ordenaTupla (b,a,c,d)
+    | b > c = ordenaTupla (a,c,b,d)
+    | c > d = ordenaTupla (a,b,d,c)
+    | otherwise = (a,b,c,d) 
+
+ordenaT:: Int -> Int -> Int -> Int -> (Int,Int,Int,Int)
+ordenaT a b c d = ordenaTupla (a,b,c,d) 
+
+-- Exercicio 33
+
+diferencaDeDatas:: (Int,Int,Int) -> (Int,Int,Int) -> Int
+diferencaDeDatas (a,b,c) (x,y,z) = (x + y*30 + z*365) - (a + b*30 + c*365)
+

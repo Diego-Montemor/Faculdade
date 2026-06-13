@@ -1,0 +1,213 @@
+{
+  "timestamp": "2026-05-17T19:44:45.671621",
+  "topologies": {
+    "erdos": {
+      "description": "Grafo Erd\u0151s-R\u00e9nyi (aleat\u00f3rio)",
+      "params": [
+        0.1
+      ],
+      "graphs": [
+        {
+          "filename": "erdos_500_n1.txt",
+          "nodes": 500,
+          "edges": 12540,
+          "size_kb": 128.37
+        },
+        {
+          "filename": "erdos_1000_n2.txt",
+          "nodes": 1000,
+          "edges": 49778,
+          "size_kb": 520.4
+        },
+        {
+          "filename": "erdos_1500_n3.txt",
+          "nodes": 1500,
+          "edges": 112927,
+          "size_kb": 1261.75
+        },
+        {
+          "filename": "erdos_2000_n4.txt",
+          "nodes": 2000,
+          "edges": 199753,
+          "size_kb": 2303.38
+        },
+        {
+          "filename": "erdos_2500_n5.txt",
+          "nodes": 2500,
+          "edges": 312983,
+          "size_kb": 3677.32
+        },
+        {
+          "filename": "erdos_3000_n6.txt",
+          "nodes": 3000,
+          "edges": 449816,
+          "size_kb": 5350.86
+        },
+        {
+          "filename": "erdos_4000_n7.txt",
+          "nodes": 4000,
+          "edges": 799049,
+          "size_kb": 9649.1
+        },
+        {
+          "filename": "erdos_5000_n8.txt",
+          "nodes": 5000,
+          "edges": 1249759,
+          "size_kb": 15227.22
+        },
+        {
+          "filename": "erdos_7500_n9.txt",
+          "nodes": 7500,
+          "edges": 2812436,
+          "size_kb": 34672.1
+        },
+        {
+          "filename": "erdos_10000_n10.txt",
+          "nodes": 10000,
+          "edges": 4998905,
+          "size_kb": 61989.75
+        }
+      ]
+    },
+    "barabasi": {
+      "description": "Grafo Barab\u00e1si-Albert (sem escala)",
+      "params": [
+        3
+      ],
+      "graphs": [
+        {
+          "filename": "barabasi_500_n1.txt",
+          "nodes": 500,
+          "edges": 1491,
+          "size_kb": 14.29
+        },
+        {
+          "filename": "barabasi_1000_n2.txt",
+          "nodes": 1000,
+          "edges": 2991,
+          "size_kb": 29.59
+        },
+        {
+          "filename": "barabasi_1500_n3.txt",
+          "nodes": 1500,
+          "edges": 4491,
+          "size_kb": 46.71
+        },
+        {
+          "filename": "barabasi_2000_n4.txt",
+          "nodes": 2000,
+          "edges": 5991,
+          "size_kb": 63.92
+        },
+        {
+          "filename": "barabasi_2500_n5.txt",
+          "nodes": 2500,
+          "edges": 7491,
+          "size_kb": 81.53
+        },
+        {
+          "filename": "barabasi_3000_n6.txt",
+          "nodes": 3000,
+          "edges": 8991,
+          "size_kb": 99.32
+        },
+        {
+          "filename": "barabasi_4000_n7.txt",
+          "nodes": 4000,
+          "edges": 11991,
+          "size_kb": 135.15
+        },
+        {
+          "filename": "barabasi_5000_n8.txt",
+          "nodes": 5000,
+          "edges": 14991,
+          "size_kb": 170.95
+        },
+        {
+          "filename": "barabasi_7500_n9.txt",
+          "nodes": 7500,
+          "edges": 22491,
+          "size_kb": 261.6
+        },
+        {
+          "filename": "barabasi_10000_n10.txt",
+          "nodes": 10000,
+          "edges": 29991,
+          "size_kb": 352.6
+        }
+      ]
+    },
+    "watts": {
+      "description": "Grafo Watts-Strogatz (mundo pequeno)",
+      "params": [
+        4,
+        0.3
+      ],
+      "graphs": [
+        {
+          "filename": "watts_500_n1.txt",
+          "nodes": 500,
+          "edges": 1000,
+          "size_kb": 10.26
+        },
+        {
+          "filename": "watts_1000_n2.txt",
+          "nodes": 1000,
+          "edges": 2000,
+          "size_kb": 20.93
+        },
+        {
+          "filename": "watts_1500_n3.txt",
+          "nodes": 1500,
+          "edges": 3000,
+          "size_kb": 33.46
+        },
+        {
+          "filename": "watts_2000_n4.txt",
+          "nodes": 2000,
+          "edges": 4000,
+          "size_kb": 46.14
+        },
+        {
+          "filename": "watts_2500_n5.txt",
+          "nodes": 2500,
+          "edges": 5000,
+          "size_kb": 58.76
+        },
+        {
+          "filename": "watts_3000_n6.txt",
+          "nodes": 3000,
+          "edges": 6000,
+          "size_kb": 71.36
+        },
+        {
+          "filename": "watts_4000_n7.txt",
+          "nodes": 4000,
+          "edges": 8000,
+          "size_kb": 96.63
+        },
+        {
+          "filename": "watts_5000_n8.txt",
+          "nodes": 5000,
+          "edges": 10000,
+          "size_kb": 121.81
+        },
+        {
+          "filename": "watts_7500_n9.txt",
+          "nodes": 7500,
+          "edges": 15000,
+          "size_kb": 184.95
+        },
+        {
+          "filename": "watts_10000_n10.txt",
+          "nodes": 10000,
+          "edges": 20000,
+          "size_kb": 248.06
+        }
+      ]
+    }
+  },
+  "successful": 30,
+  "total": 30,
+  "success_rate": "100.0%"
+}
