@@ -51,16 +51,3 @@ elementoN([_|B],I,X) :- I> 1 ,  I1 is I - 1 , elementoN(B,I1,X).
 constroiLista(A,A,[A]).
 constroiLista(B,A,[]) :- B > A.
 constroiLista(A,B,[A|C]) :- A < B , A1 is A + 1 , constroiLista(A1,B,C). 
-
-
-
-
-
-
-
-
-
-
-
-
-
