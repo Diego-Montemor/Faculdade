@@ -1,11 +1,10 @@
 % Diego Vianna Leite Montemor   2025.1.08.023
 
-lsort(Lista, Ordenada) :-  troca(Lista,ListaOrdenando), lsort(ListaOrdenando,ListaOrdenando) .
-     
-confere([]).
-confere([_]).
-confere([A,B|C]) :- tamlista(A,X),tamlista(B,Y), X =< Y , confere([B|C]).
-
+% Exercício 1
+% 1.1 acha o tamanho da lista
+tamlista([],0).
+tamlista([_|B],X) :- tamlista(B,X1), X is X1 + 1.
+% 1.2 troca os elementos de lugar, colocando o maior elemento para o final da lista
 troca([],[]).
 troca([A],[A]).
 troca([A,B|C],[B|D]) :- 
@@ -19,6 +18,20 @@ troca([A,B|C],[A|D]) :-
     tamlista(B,Y),
     X =< Y,
     troca([B|C],D).
+% 1.3 confere se a lista está ordenada
+confere([]).
+confere([_]).
+confere([A,B|C]) :- tamlista(A,X),tamlista(B,Y), X =< Y , confere([B|C]).
+% 1.4 ordena a lista usando o método bubble sort
+lsort(Lista, Ordenada) :-
+    confere(Lista),
+    Ordenada = Lista,
+    !.
+lsort(Lista, Ordenada) :-
+    troca(Lista,ListaOrdenando),
+    lsort(ListaOrdenando,Ordenada).
 
+% Exercício 2
+% 2.1 detarmina o comprimento de cada sublista
 tamlista([],0).
 tamlista([_|B],X) :- tamlista(B,X1), X is X1 + 1.
