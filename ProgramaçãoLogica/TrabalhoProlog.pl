@@ -33,5 +33,8 @@ lsort(Lista, Ordenada) :-
 
 % Exercício 2
 % 2.1 detarmina o comprimento de cada sublista
-tamlista([],0).
-tamlista([_|B],X) :- tamlista(B,X1), X is X1 + 1.
+comprimento([],[([],0)]).
+comprimento([A|B], [(A,X)|Y]) :- tamlista(A, X), comprimento(B,Y).
+% 2.1 calcula a frequencia de cada tamanho
+frequenciaComprimento([],[]).
+frequenciaComprimento([A|B],[(X,Y)|Z]) :- tamlista(A,X), frequenciaComprimento(B,Z).
