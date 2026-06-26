@@ -32,9 +32,64 @@ lsort(Lista, Ordenada) :-
     lsort(ListaOrdenando,Ordenada).
 
 % Exercício 2
-% 2.1 detarmina o comprimento de cada sublista
-comprimento([],[([],0)]).
-comprimento([A|B], [(A,X)|Y]) :- tamlista(A, X), comprimento(B,Y).
-% 2.1 calcula a frequencia de cada tamanho
-frequenciaComprimento([],[]).
-frequenciaComprimento([A|B],[(X,Y)|Z]) :- tamlista(A,X), frequenciaComprimento(B,Z).
+% 2.1 Comprimento de cada sublista
+comprimento([], []).
+comprimento([A|B], [(A,X)|Y]) :-
+    length(A, X),
+    comprimento(B, Y).
+
+% 2.2 Frequência de cada comprimento
+frequenciaComprimento(Pares, Frequencias) :-
+    extrairTamanhos(Pares, Tamanhos),
+    msort(Tamanhos, Ordenados),
+    contarFrequencias(Ordenados, Frequencias).
+
+extrairTamanhos([], []).
+extrairTamanhos([(_,T)|Resto], [T|Ts]) :-
+    extrairTamanhos(Resto, Ts).
+
+contarFrequencias([], []).
+contarFrequencias([T|Ts], [(T,Freq)|Resto]) :-
+    contarOcorrencias(T, [T|Ts], Freq, Remaining),
+    contarFrequencias(Remaining, Resto).
+
+contarOcorrencias(_, [], 0, []).
+contarOcorrencias(T, [T|Ts], Freq, Remaining) :-
+    !,
+    contarOcorrencias(T, Ts, F1, Remaining),
+    Freq is F1 + 1.
+contarOcorrencias(_, Lista, 0, Lista).
+
+% 2.3 Associar cada sublista à frequência do seu comprimento
+associarFrequencia([], _, []).
+associarFrequencia([(Sub,Tam)|Resto], Frequencias, [(Freq-Sub)|Rs]) :-
+    buscarFrequencia(Tam, Frequencias, Freq),
+    associarFrequencia(Resto, Frequencias, Rs).
+
+buscarFrequencia(Tam, [(Tam,Freq)|_], Freq) :- !.
+buscarFrequencia(Tam, [_|Resto], Freq) :-
+    buscarFrequencia(Tam, Resto, Freq).
+
+% 2.4 Ordenar pela frequência (usando insertion sort)
+inserirOrdenado(X-S, [], [X-S]).
+inserirOrdenado(X-S, [Y-T|Resto], [X-S,Y-T|Resto]) :- X =< Y, !.
+inserirOrdenado(X-S, [Y-T|Resto], [Y-T|Resto2]) :- inserirOrdenado(X-S, Resto, Resto2).
+
+ordena([], []).
+ordena([H|T], Ordenada) :-
+    ordena(T, OrdT),
+    inserirOrdenado(H, OrdT, Ordenada).
+
+ordenaFrequencia(Lista, Ordenada) :-
+    ordena(Lista, ListaOrdenada),
+    extrairSublistas(ListaOrdenada, Ordenada).
+
+extrairSublistas([], []).
+extrairSublistas([_-Sub|Resto], [Sub|Rs]) :- extrairSublistas(Resto, Rs).
+
+% lfsort
+lfsort(Lista, Ordenada) :-
+    comprimento(Lista, Pares),
+    frequenciaComprimento(Pares, Frequencias),
+    associarFrequencia(Pares, Frequencias, ListaAssociada),
+    ordenaFrequencia(ListaAssociada, Ordenada).
