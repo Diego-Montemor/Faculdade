@@ -1,0 +1,15 @@
+Class Code: 01
+Class Title: Eng. Dados
+Assessments:
+  - Type: Seminar | Value: 6.0 | Weight: 0.4
+=========================================
+Class Code: 011
+Class Title: Poo
+Assessments:
+  - Type: Assignment | Value: 10.0 | Weight: 0.2
+=========================================
+Class Code: 022
+Class Title: En.g de Prompt
+Assessments:
+  - Type: Seminar | Value: 11.0 | Weight: 0.1
+=========================================
