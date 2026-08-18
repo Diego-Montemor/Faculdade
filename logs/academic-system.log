@@ -1,0 +1,3 @@
+2026-06-29 08:59:21,935 [MainThread] INFO  academic_system.service.persistence_service - Persistence type configured to: PersistenceType.TXT
+2026-06-29 08:59:21,936 [MainThread] INFO  academic_system.service.persistence_service - Loading data using TXT persistence
+2026-06-29 08:59:21,937 [MainThread] INFO  academic_system.service.persistence_service - Loaded 0 class(es)
