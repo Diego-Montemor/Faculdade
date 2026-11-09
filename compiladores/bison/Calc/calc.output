@@ -1,0 +1,212 @@
+Gramática
+
+    0 $accept: calculo $end
+
+    1 calculo: calculo expr ENTER
+    2        | ε
+
+    3 expr: expr MAIS expr
+    4     | expr MENOS expr
+    5     | expr MULT expr
+    6     | expr DIV expr
+    7     | ABRE expr FECHA
+    8     | NUM
+
+
+Terminais, com as regras onde eles aparecem
+
+    $end (0) 0
+    error (256)
+    ENTER (258) 1
+    MAIS (259) 3
+    MENOS (260) 4
+    MULT (261) 5
+    DIV (262) 6
+    ABRE (263) 7
+    FECHA (264) 7
+    NUM (265) 8
+
+
+Não terminais com as regras onde eles aparecem
+
+    $accept (11)
+        à esquerda: 0
+    calculo (12)
+        à esquerda: 1 2
+        à direita: 0 1
+    expr (13)
+        à esquerda: 3 4 5 6 7 8
+        à direita: 1 3 4 5 6 7
+
+
+Estado 0
+
+    0 $accept: • calculo $end
+
+    $padrão  reduzir usando a regra 2 (calculo)
+
+    calculo  ir ao estado 1
+
+
+Estado 1
+
+    0 $accept: calculo • $end
+    1 calculo: calculo • expr ENTER
+
+    $end  deslocar, e ir ao estado 2
+    ABRE  deslocar, e ir ao estado 3
+    NUM   deslocar, e ir ao estado 4
+
+    expr  ir ao estado 5
+
+
+Estado 2
+
+    0 $accept: calculo $end •
+
+    $padrão  aceitar
+
+
+Estado 3
+
+    7 expr: ABRE • expr FECHA
+
+    ABRE  deslocar, e ir ao estado 3
+    NUM   deslocar, e ir ao estado 4
+
+    expr  ir ao estado 6
+
+
+Estado 4
+
+    8 expr: NUM •
+
+    $padrão  reduzir usando a regra 8 (expr)
+
+
+Estado 5
+
+    1 calculo: calculo expr • ENTER
+    3 expr: expr • MAIS expr
+    4     | expr • MENOS expr
+    5     | expr • MULT expr
+    6     | expr • DIV expr
+
+    ENTER  deslocar, e ir ao estado 7
+    MAIS   deslocar, e ir ao estado 8
+    MENOS  deslocar, e ir ao estado 9
+    MULT   deslocar, e ir ao estado 10
+    DIV    deslocar, e ir ao estado 11
+
+
+Estado 6
+
+    3 expr: expr • MAIS expr
+    4     | expr • MENOS expr
+    5     | expr • MULT expr
+    6     | expr • DIV expr
+    7     | ABRE expr • FECHA
+
+    MAIS   deslocar, e ir ao estado 8
+    MENOS  deslocar, e ir ao estado 9
+    MULT   deslocar, e ir ao estado 10
+    DIV    deslocar, e ir ao estado 11
+    FECHA  deslocar, e ir ao estado 12
+
+
+Estado 7
+
+    1 calculo: calculo expr ENTER •
+
+    $padrão  reduzir usando a regra 1 (calculo)
+
+
+Estado 8
+
+    3 expr: expr MAIS • expr
+
+    ABRE  deslocar, e ir ao estado 3
+    NUM   deslocar, e ir ao estado 4
+
+    expr  ir ao estado 13
+
+
+Estado 9
+
+    4 expr: expr MENOS • expr
+
+    ABRE  deslocar, e ir ao estado 3
+    NUM   deslocar, e ir ao estado 4
+
+    expr  ir ao estado 14
+
+
+Estado 10
+
+    5 expr: expr MULT • expr
+
+    ABRE  deslocar, e ir ao estado 3
+    NUM   deslocar, e ir ao estado 4
+
+    expr  ir ao estado 15
+
+
+Estado 11
+
+    6 expr: expr DIV • expr
+
+    ABRE  deslocar, e ir ao estado 3
+    NUM   deslocar, e ir ao estado 4
+
+    expr  ir ao estado 16
+
+
+Estado 12
+
+    7 expr: ABRE expr FECHA •
+
+    $padrão  reduzir usando a regra 7 (expr)
+
+
+Estado 13
+
+    3 expr: expr • MAIS expr
+    3     | expr MAIS expr •
+    4     | expr • MENOS expr
+    5     | expr • MULT expr
+    6     | expr • DIV expr
+
+    $padrão  reduzir usando a regra 3 (expr)
+
+
+Estado 14
+
+    3 expr: expr • MAIS expr
+    4     | expr • MENOS expr
+    4     | expr MENOS expr •
+    5     | expr • MULT expr
+    6     | expr • DIV expr
+
+    $padrão  reduzir usando a regra 4 (expr)
+
+
+Estado 15
+
+    3 expr: expr • MAIS expr
+    4     | expr • MENOS expr
+    5     | expr • MULT expr
+    5     | expr MULT expr •
+    6     | expr • DIV expr
+
+    $padrão  reduzir usando a regra 5 (expr)
+
+
+Estado 16
+
+    3 expr: expr • MAIS expr
+    4     | expr • MENOS expr
+    5     | expr • MULT expr
+    6     | expr • DIV expr
+    6     | expr DIV expr •
+
+    $padrão  reduzir usando a regra 6 (expr)

@@ -32,13 +32,13 @@ public static class UDPChannel implements IChannel {
 // estático create(), que centralize a decisão de qual Channel instanciar.
 // Ex.: public static Channel create() { ... return new TCPChannel(); }
 public static class ChannelFactory {
-    private static TCPChannel channel = new TCPChannel();
+    private static IChannel channel = new TCPChannel();
     public static Channel create(){
-        return (Channel) channel;
+        return channel;
     }
 }
 
-private static Channel Channel1;
+interface Channel {}
 
 public static void main() {
     ChannelFactory factory = new ChannelFactory();
