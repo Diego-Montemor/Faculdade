@@ -1,5 +1,6 @@
 programa teste
     inteiro a b
+    logico c d
 inicio
     leia a
     enquanto a > 0 faca

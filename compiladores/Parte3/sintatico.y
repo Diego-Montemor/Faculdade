@@ -6,11 +6,13 @@
 
 int yylex();
 void yyerror(const char *);
-extern FILE *yyin;
+extern FILE *yyin, *yyout;
 extern int nlinha;
 extern char atomo[30];
 int contavar = 0;
+int rotulo = 0;
 int tipo;
+#define DEBUG(x) 
 
 %}
 
@@ -57,11 +59,22 @@ int tipo;
 %%
 programa
     : cabecalho 
-        { printf("\tINPP\n"); }
+        { fprintf(yyout,"\tINPP\n"); }
       variaveis 
-        { printf("\tAMEM\t%d\n",contavar); }
+        {
+            DEBUG(mostratabela();)
+            empilha(contavar);
+            if (contavar > 0) {   
+                fprintf(yyout,"\tAMEM\t%d\n",contavar); 
+            }
+        }
       T_INICIO lista_comandos T_FIM
-        { printf("\tDEMEM\tX\n\tFIM\n"); }
+        { 
+            int conta = desempilha();
+            if (conta > 0)
+                fprintf(yyout,"\tDEMEM\tX\n");
+            fprintf(yyout,"\tFIM\n"); 
+            }
     ;
 
 cabecalho
@@ -87,15 +100,16 @@ tipo
 
 lista_variaveis
     : lista_variaveis T_IDENTIF
-        {strcpy(elementab.nome, atomo);
+        {
+         strcpy(elementab.nome, atomo);
          elementab.tipo = tipo;
-         elementab.desl = contavar;
+         elementab.end = contavar;
          inseresimbolos(elementab);
          contavar++;}
     | T_IDENTIF
         {strcpy(elementab.nome, atomo);
          elementab.tipo = tipo;
-         elementab.desl = contavar;
+         elementab.end = contavar;
          inseresimbolos(elementab);
          contavar++;}
     ;
@@ -115,76 +129,109 @@ comando
 
 leitura
     : T_LEIA T_IDENTIF
-        { printf("\tLEIA\n\tARZG\tXzn\n"); }
+        { 
+            int pos = buscasimbolo(atomo);
+            fprintf(yyout,"\tLEIA\n\tARZG\t%d\n", tabsimb[pos].end); 
+        }
     ;
 
 escrita
     : T_ESCREVA expressao
-        { printf("\tESCR\n"); }
+        { fprintf(yyout,"\tESCR\n"); }
     ;
 
 repeticao
     : T_ENQTO
-        { printf("Lx\tNADA\n"); } 
+        { 
+        
+            fprintf(yyout,"Lx\tNADA\n",++rotulo); 
+            empilha(rotulo);    
+        } 
       expressao
       T_FACA 
-        { printf("\tDSVF\tLy\n"); }
+        { 
+            fprintf(yyout,"\tDSVF\tLy\n",++rotulo); 
+            empilha(rotulo);
+        }
       lista_comandos 
       T_FIMENQTO
-        { printf("\tDSVS\tLx\n");
-          printf("Ly\tNADA\n"); }
+        { 
+            int y = desempilha();
+            int x = desempilha();
+            fprintf(yyout,"\tDSVS\tL%d\n", x);
+            fprintf(yyout,"L%d\tNADA\n", y);   
+        }
     ;
 
 selecao
     : T_SE expressao T_ENTAO 
-        { printf("\tDSVF\tLx\n"); }
+        { 
+            fprintf(yyout,"\tDSVF\tL%d\n", ++rotulo); 
+            empilha(rotulo);
+        }
       lista_comandos T_SENAO 
         { 
-          printf("\tDSVS\tLy\n");
-          printf("\tLx\tNADA\n"); 
+            int x = desempilha();
+            fprintf(yyout,"\tDSVS\tL%d\n", ++rotulo);
+            fprintf(yyout,"\tL%d\tNADA\n",x);
+            empilha(rotulo); 
         }
       lista_comandos T_FIMSE
-        { printf("\tLy\tNADA\n"); }
+        { 
+            int y = desempilha();
+            fprintf(yyout,"\tL%d\tNADA\n",y); 
+        }
     ;
 
 atribuicao
-    : T_IDENTIF T_ATRIB expressao
-        { printf("\tARZG\tx\n"); }
+    : T_IDENTIF 
+        {
+            int pos = buscasimbolo(atomo);
+            empilha(pos);
+        }
+      T_ATRIB expressao
+        { 
+            int pos = desempilha();
+            fprintf(yyout,"\tARZG\t%d\n", tabsimb[pos].end); 
+        }
     ;
 
 expressao
     : expressao T_VEZES expressao
-        { printf("\tMULT\n"); }
+        { fprintf(yyout,"\tMULT\n"); }
     | expressao T_DIV expressao
-        { printf("\tDIV\n"); }
+        { fprintf(yyout,"\tDIV\n"); }
     | expressao T_MAIS expressao
-        { printf("\tSOMA\n"); }
+        { fprintf(yyout,"\tSOMA\n"); }
     | expressao T_MENOS expressao
-        { printf("\tSUBT\n"); }
+        { fprintf(yyout,"\tSUBT\n"); }
     | expressao T_MAIOR expressao
-        { printf("\tCMMA\n"); }
+        { fprintf(yyout,"\tCMMA\n"); }
     | expressao T_MENOR expressao
-        { printf("\tCMME\n"); }
+        { fprintf(yyout,"\tCMME\n"); }
     | expressao T_IGUAL expressao
-        { printf("\tCMIG"); }
+        { fprintf(yyout,"\tCMIG"); }
     | expressao T_E expressao
-        { printf("\tCONJ\n"); }
+        { fprintf(yyout,"\tCONJ\n"); }
     | expressao T_OU expressao
-        { printf("\tDISJ\n"); }
+        { fprintf(yyout,"\tDISJ\n"); }
     | termo
     ;
 
 termo
     : T_IDENTIF
-        { printf("\tCRVG\tx\n"); }
+        { 
+          int pos = buscasimbolo(atomo);
+          fprintf(yyout,"\tCRVG\t%d\n", tabsimb[pos].end); 
+        }
     | T_NUMERO
-        { printf("\tCRCT\tx\n"); }
+        { fprintf(yyout,"\tCRCT\t%s\n", atomo); }
     | T_V
-        { printf("\tCRCT\t1\n"); }
+        { fprintf(yyout,"\tCRCT\t1\n"); }
     | T_F
-        { printf("\tCRCT\t0\n"); }
+        { fprintf(yyout,"\tCRCT\t0\n"); }
     | T_NAO termo
-        { printf("\tNEGA\n");}
+        { fprintf(yyout,"\tNEGA\n");}
     | T_ABRE expressao T_FECHA
     ; 
 
@@ -265,11 +312,22 @@ static int yyreport_syntax_error(const yypcontext_t *ctx)
 }
 
 int main(int argc, char *argv[]) {
+    char nameIn[100], nameOut[100], *s;
     if (argc < 2) {
-        printf("Uso:\n \t%s <nomeprog.simples>\n\n", argv[0]);
+        printf("Uso:\n \t%s <nomeprog[.simples]>\n\n", argv[0]);
         exit(20);
     }
-    yyin = fopen(argv[1], "rt");
+    strcpy(nameIn, argv[1]);
+    s = strstr(nameIn, ".simples");
+    if (s){
+        *s = 0;
+    }
+    strcpy(nameOut, nameIn);
+    strcat(nameOut, ".mvs");
+    strcat(nameIn, ".simples");
+    yyin = fopen(nameIn, "rt");
+    yyout = fopen(nameOut, "wt");
     yyparse();
     fclose(yyin);
+    fclose(yyout);
 }

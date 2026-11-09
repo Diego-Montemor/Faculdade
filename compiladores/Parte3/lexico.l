@@ -43,6 +43,8 @@ E                 { return T_E; }
 OU                { return T_OU; }
 NAO               { return T_NAO; }
 "<-"              { return T_ATRIB; }
+"("               { return T_ABRE; }
+")"               { return T_FECHA; }
 
 {identificador}   { strcpy(atomo, yytext); return T_IDENTIF; }
 {numero}          { strcpy(atomo, yytext); return T_NUMERO; }

@@ -3,7 +3,7 @@ void yyerror(const char *);
 
 void erro_semantico(char *s){
     fprintf(stderr, "Erro léxico na linha %d.\n", nlinha);
-    fprintf(stderr, " símbolo %s desconhecido\n\n", s);
+    fprintf(stderr, "%s\n\n", s);
     exit(10);
 }
 
@@ -30,7 +30,7 @@ int desempilha (){
 typedef struct {
     char nome[30];
     int tipo;
-    int desl;
+    int end;
 } tiptab;
 
 tiptab elementab, tabsimb[TAMTAB];
@@ -43,16 +43,25 @@ void inseresimbolos(tiptab elem){
             erro_semantico("Identificador duplicado");
         }
     }
+
     tabsimb[++topotab] = elem;
 }
 
 int buscasimbolo(char *nome){
     int i;
-    for (i = 0; i <= topotab; i++) {
+    for (i = topotab; i >= 0; i--) {
         if (strcmp(nome, tabsimb[i].nome) == 0) {
             return i;
         }
     }
+
     erro_semantico("Identificador não encontrado");
     return -1;
+}
+
+void mostratabela(){
+    printf("%10s %3s %3s\n","Nome", "Tipo", "End");
+    for (int i = 0; i <= topotab; i++){
+        printf("%10s %3d %3d\n",tabsimb[i].nome, tabsimb[i].tipo, tabsimb[i].end);
+    }
 }
