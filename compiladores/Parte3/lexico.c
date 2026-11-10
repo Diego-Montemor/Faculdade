@@ -508,7 +508,7 @@ char *yytext;
 #line 1 "lexico.l"
 #line 2 "lexico.l"
 #include "sintatico.h"
-void erro_lexico(char *);
+void yyerror(const char *);
 int nlinha = 1;
 char atomo[30];
 #line 514 "lexico.c"
@@ -957,14 +957,18 @@ YY_RULE_SETUP
 case 34:
 YY_RULE_SETUP
 #line 54 "lexico.l"
-{ erro_lexico (yytext); }
+{ 
+                    char msg[100];
+                    sprintf(msg, " simbolo %s desconhecido!", yytext);
+                    yyerror(msg); 
+                  }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 55 "lexico.l"
+#line 59 "lexico.l"
 ECHO;
 	YY_BREAK
-#line 967 "lexico.c"
+#line 971 "lexico.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1969,15 +1973,8 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 55 "lexico.l"
+#line 59 "lexico.l"
 
-
-
-void erro_lexico(char *s) {
-    fprintf(stderr, "Erro Léxico na linha %d.\n",nlinha);
-    fprintf(stderr, "  símbolo %s desconhecido\n\n", s);
-    exit(10);
-}
 
 int yywrap() {
   return 1;

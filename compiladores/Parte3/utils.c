@@ -1,29 +1,47 @@
 extern int nlinha;
 void yyerror(const char *);
 
-void erro_semantico(char *s){
-    fprintf(stderr, "Erro léxico na linha %d.\n", nlinha);
-    fprintf(stderr, "%s\n\n", s);
-    exit(10);
-}
-
 enum {
     INT = 10,
     LOG = 20
 };
 
 #define TAMPILHA 100
-int Pilha[TAMPILHA];
+struct
+{
+    int valor;
+    char tipo;   
+}Pilha[TAMPILHA];
+
 int topo = -1;
 
-void empilha (int v){
+void empilha (int valor, char tipo){
     if (topo > TAMPILHA) yyerror("Pilha cheia");
-    Pilha[++topo] = v;
+    Pilha[++topo].valor = valor;
+    Pilha[topo].tipo = tipo;
 }
 
-int desempilha (){
+int desempilha (char tipo){
     if (topo == -1 ) yyerror("Pilha Vazia");
-    return Pilha[topo--];
+    if (Pilha[topo].tipo != tipo)
+        yyerror("Tipo diferente no desempilha");
+    return Pilha[topo--].valor;
+}
+
+void testatipo(int tipo1, int tipo2, int ret){
+    int t1 = desempilha('t');
+    int t2 = desempilha('t');
+    if (t1 != tipo1 || t2 != tipo2)
+        yyerror("Incompatibilidade de tipo!");
+
+    empilha(ret,'t');
+}
+
+void mostrapilha(){
+    printf("Pilha = [");
+    for (int i = topo;i > 0; i--)
+        printf("(%d,%c)", Pilha[i].valor,Pilha[i].tipo);
+    printf("]\n");
 }
 
 #define TAMTAB 100
@@ -40,7 +58,7 @@ void inseresimbolos(tiptab elem){
     int i;
     for (i = 0; i <= topotab; i++) {
         if (strcmp(elem.nome, tabsimb[i].nome) == 0) {
-            erro_semantico("Identificador duplicado");
+            yyerror("Identificador duplicado");
         }
     }
 
@@ -55,7 +73,7 @@ int buscasimbolo(char *nome){
         }
     }
 
-    erro_semantico("Identificador não encontrado");
+    yyerror("Identificador não encontrado");
     return -1;
 }
 

@@ -1,0 +1,9 @@
+programa tipos
+    inteiro a
+inicio
+    leia a
+    enquanto a faca
+        escreva a
+        a <- a -1
+    fimenquanto
+fimprograma

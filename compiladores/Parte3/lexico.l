@@ -1,6 +1,6 @@
 %{
 #include "sintatico.h"
-void erro_lexico(char *);
+void yyerror(const char *);
 int nlinha = 1;
 char atomo[30];
 %}
@@ -51,15 +51,12 @@ NAO               { return T_NAO; }
 {espaco}          { /*não faz nada*/ }
 {novalinha}       { nlinha++; }
 
-.                 { erro_lexico (yytext); }
+.                 { 
+                    char msg[100];
+                    sprintf(msg, " simbolo %s desconhecido!", yytext);
+                    yyerror(msg); 
+                  }
 %%
-
-
-void erro_lexico(char *s) {
-    fprintf(stderr, "Erro Léxico na linha %d.\n",nlinha);
-    fprintf(stderr, "  símbolo %s desconhecido\n\n", s);
-    exit(10);
-}
 
 int yywrap() {
   return 1;

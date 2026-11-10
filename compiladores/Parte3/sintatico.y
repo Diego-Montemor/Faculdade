@@ -12,7 +12,7 @@ extern char atomo[30];
 int contavar = 0;
 int rotulo = 0;
 int tipo;
-#define DEBUG(x) 
+#define DEBUG(x)
 
 %}
 
@@ -63,17 +63,18 @@ programa
       variaveis 
         {
             DEBUG(mostratabela();)
-            empilha(contavar);
+            DEBUG(mostrapilha();)
+            empilha(contavar, 'c');
             if (contavar > 0) {   
                 fprintf(yyout,"\tAMEM\t%d\n",contavar); 
             }
         }
       T_INICIO lista_comandos T_FIM
         { 
-            int conta = desempilha();
+            int conta = desempilha('c');
             if (conta > 0)
-                fprintf(yyout,"\tDEMEM\tX\n");
-            fprintf(yyout,"\tFIM\n"); 
+                fprintf(yyout,"\tDMEM\t%d\n", conta);
+            fprintf(yyout,"\tFIMP\n"); 
             }
     ;
 
@@ -137,27 +138,33 @@ leitura
 
 escrita
     : T_ESCREVA expressao
-        { fprintf(yyout,"\tESCR\n"); }
+        { 
+            int t = desempilha('t');
+            fprintf(yyout,"\tESCR\n"); 
+        }
     ;
 
 repeticao
     : T_ENQTO
         { 
         
-            fprintf(yyout,"Lx\tNADA\n",++rotulo); 
-            empilha(rotulo);    
+            fprintf(yyout,"L%d\tNADA\n",++rotulo); 
+            empilha(rotulo, 'r');    
         } 
       expressao
       T_FACA 
         { 
-            fprintf(yyout,"\tDSVF\tLy\n",++rotulo); 
-            empilha(rotulo);
+            int t = desempilha('t');
+            if (t != LOG)
+                yyerror("Incompatibilidade de tipo na repetição");
+            fprintf(yyout,"\tDSVF\tL%d\n",++rotulo); 
+            empilha(rotulo, 'r');
         }
       lista_comandos 
       T_FIMENQTO
         { 
-            int y = desempilha();
-            int x = desempilha();
+            int y = desempilha('r');
+            int x = desempilha('r');
             fprintf(yyout,"\tDSVS\tL%d\n", x);
             fprintf(yyout,"L%d\tNADA\n", y);   
         }
@@ -166,19 +173,22 @@ repeticao
 selecao
     : T_SE expressao T_ENTAO 
         { 
+            int t = desempilha('t');
+            if (t != LOG)
+                yyerror("Incompatibilidade de tipo na seleção");
             fprintf(yyout,"\tDSVF\tL%d\n", ++rotulo); 
-            empilha(rotulo);
+            empilha(rotulo, 'r');
         }
       lista_comandos T_SENAO 
         { 
-            int x = desempilha();
+            int x = desempilha('r');
             fprintf(yyout,"\tDSVS\tL%d\n", ++rotulo);
             fprintf(yyout,"\tL%d\tNADA\n",x);
-            empilha(rotulo); 
+            empilha(rotulo, 'r'); 
         }
       lista_comandos T_FIMSE
         { 
-            int y = desempilha();
+            int y = desempilha('r');
             fprintf(yyout,"\tL%d\tNADA\n",y); 
         }
     ;
@@ -187,34 +197,37 @@ atribuicao
     : T_IDENTIF 
         {
             int pos = buscasimbolo(atomo);
-            empilha(pos);
+            empilha(pos,'p');
         }
       T_ATRIB expressao
         { 
-            int pos = desempilha();
+            int t = desempilha('t');
+            int pos = desempilha('p');
+            if (t != tabsimb[pos].tipo)
+                yyerror("Imcompatibilidade de tipos na atribuição");
             fprintf(yyout,"\tARZG\t%d\n", tabsimb[pos].end); 
         }
     ;
 
 expressao
     : expressao T_VEZES expressao
-        { fprintf(yyout,"\tMULT\n"); }
+        { testatipo(INT, INT, INT); fprintf(yyout,"\tMULT\n"); }
     | expressao T_DIV expressao
-        { fprintf(yyout,"\tDIV\n"); }
+        { testatipo(INT, INT, INT); fprintf(yyout,"\tDIV\n"); }
     | expressao T_MAIS expressao
-        { fprintf(yyout,"\tSOMA\n"); }
+        { testatipo(INT, INT, INT); fprintf(yyout,"\tSOMA\n"); }
     | expressao T_MENOS expressao
-        { fprintf(yyout,"\tSUBT\n"); }
+        { testatipo(INT, INT, INT); fprintf(yyout,"\tSUBT\n"); }
     | expressao T_MAIOR expressao
-        { fprintf(yyout,"\tCMMA\n"); }
+        { testatipo(INT, INT, LOG); fprintf(yyout,"\tCMMA\n"); }
     | expressao T_MENOR expressao
-        { fprintf(yyout,"\tCMME\n"); }
+        { testatipo(INT, INT, LOG); fprintf(yyout,"\tCMME\n"); }
     | expressao T_IGUAL expressao
-        { fprintf(yyout,"\tCMIG"); }
+        { testatipo(INT, INT, LOG); fprintf(yyout,"\tCMIG"); }
     | expressao T_E expressao
-        { fprintf(yyout,"\tCONJ\n"); }
+        { testatipo(LOG, LOG, LOG); fprintf(yyout,"\tCONJ\n"); }
     | expressao T_OU expressao
-        { fprintf(yyout,"\tDISJ\n"); }
+        { testatipo(LOG, LOG, LOG); fprintf(yyout,"\tDISJ\n"); }
     | termo
     ;
 
@@ -223,23 +236,41 @@ termo
         { 
           int pos = buscasimbolo(atomo);
           fprintf(yyout,"\tCRVG\t%d\n", tabsimb[pos].end); 
+          empilha(tabsimb[pos].tipo,'t');
         }
     | T_NUMERO
-        { fprintf(yyout,"\tCRCT\t%s\n", atomo); }
+        { 
+            fprintf(yyout,"\tCRCT\t%s\n", atomo); 
+            empilha(INT,'t');
+        }
     | T_V
-        { fprintf(yyout,"\tCRCT\t1\n"); }
+        { 
+            fprintf(yyout,"\tCRCT\t1\n"); 
+            empilha(LOG,'t');
+        }
     | T_F
-        { fprintf(yyout,"\tCRCT\t0\n"); }
+        { 
+            fprintf(yyout,"\tCRCT\t0\n"); 
+            empilha(LOG,'t');
+        }
     | T_NAO termo
-        { fprintf(yyout,"\tNEGA\n");}
+        {
+            int t = desempilha('t');
+            if (t != LOG)
+                yyerror("O operador do NAO tem que ser logico");
+            empilha(LOG, 't'); 
+            fprintf(yyout,"\tNEGA\n");
+        }
     | T_ABRE expressao T_FECHA
     ; 
 
 %%
 
-void yyerror(const char *mensagem)
+void yyerror(const char *s)
 {
-    fprintf(stderr, "Erro Interno: %s\n", mensagem);
+    fprintf(stderr, "Erro na linha %d.\n", nlinha);
+    fprintf(stderr, "%s\n\n", s);
+    exit(10);
 }
 
 static const char *nome_token(yysymbol_kind_t token)
